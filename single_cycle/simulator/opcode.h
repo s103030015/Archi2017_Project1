@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <stdlib.h>
+
 enum RegType { NONE, RS, RT, RD, EXTRA}
 struct OpString{
   char *format;
