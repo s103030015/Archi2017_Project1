@@ -162,7 +162,13 @@ void Instruction(Instructioin *instr)
       else register[instr->rt]=0;
       break;
     case BEQ: 
-      if(register[instr->rs]==register[instr->rt]) pcAfter=register[NextPCReg]+IndexToAddr
+      if(register[instr->rs]==register[instr->rt]) pcAfter=register[NextPCReg]+TypeToReg(instr->extra);
+      break;
+    case BNE:                        
+      if(register[instr->rs]!=register[instr->rt]) pcAfter=register[NextPCReg]+TypeToReg(instr->extra);
+      break;
+    case BGTZ:                        
+      if(register[instr->rs]>0) pcAfter=register[NextPCReg]+TypeToAddr                      
                             
       
       
