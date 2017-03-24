@@ -113,6 +113,19 @@ void Instruction(Instructioin *instr)
       nextLoadReg = instr->rt;
       nextLoadValue = value;
       break;
+    case LH:
+    case LHU:
+      tmp=register[instr->rs]+instr->extra;
+      if(tmp & 0x1)
+      {
+        RaiseException(AddressErrorException, tmp);
+        return;
+      }
+      if(!ReadMem(tmp, 2, &value)) return;
+      if((value & 0x8000) && (instr->opCode == LH)) value |= 0xffff0000;
+      else value &= 0xffff;
+      nextLoadReg=instr->rt;
+      nextLoadV
       
       
       
