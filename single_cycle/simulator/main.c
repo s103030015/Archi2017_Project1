@@ -130,6 +130,40 @@ void Instruction(Instructioin *instr)
     case LB:
     case LBU:
       tmp=register[instr->rs]+instr->extra;
+      if(!ReadMem(tmp, 1, &value)) return;
+      if((value & 0x80) && (instr->opCode == LB)) value |= 0xffffff00;
+      else value &= 0xff;
+      nextLoadReg=instr->rt;
+      nextLoadValue=value;
+      break;
+    case SW:
+      if (!WriteMem((unsigned)(register[instr->rs]+instr->extra), 4, register[instr->rt])) return;
+      break;
+    case SH:
+      if (!WriteMem((unsigned)(register[instr->rs]+instr->extra), 2, register[instr->rt])) return;
+      break;
+    case SB:
+      if(!WriteMem((unsigned)(register[instr->rs]+instr->extra), 1, register[instr->rt])) return;
+      break;
+    case LUI:
+      register[instr->rt]=instr->extra << 16;
+      break;
+    case ANDI:
+      register[instr->rt]=register[instr->rs] & (instr->extra & 0xffff);
+      break;
+    case ORI:
+      register[instr->rt]=register[instr->rs] | (instr->extra & 0xffff);
+      break;
+    case NORI:
+      register[instr->rt]=~(register[instr->rs] | (instr->extra & 0xffff);
+      break;
+    case SLTI:
+      if(register[instr->rs] < instr->extra) register[instr->rt]=1;
+      else register[instr->rt]=0;
+      break;
+    case BEQ: 
+      if(register[instr->rs]==register[instr->rt]) pcAfter=register[NextPCReg]+IndexToAddr
+                            
       
       
       
