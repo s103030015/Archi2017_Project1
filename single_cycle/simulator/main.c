@@ -1,4 +1,7 @@
-#include "opcode.h"
+#include "instruc.h"
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
 class Instrction {
   public:
