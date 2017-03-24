@@ -34,6 +34,10 @@ void Instruction(Instructioin *instr)
   nextLoadReg=0;
   nextLoadValue=0;
   
+  if(!ReadMem(register[PCReg], 4, &raw) return;
+  instr->value=raw;
+  instr->Decode();
+  
   int pcAfter=register[NextPCReg]+4;
   int sum, diff, tmp, value;
   unsigned int rs, rt, imm;
@@ -162,13 +166,19 @@ void Instruction(Instructioin *instr)
       else register[instr->rt]=0;
       break;
     case BEQ: 
-      if(register[instr->rs]==register[instr->rt]) pcAfter=register[NextPCReg]+TypeToReg(instr->extra);
+      if(register[instr->rs]==register[instr->rt]) pcAfter=register[NextPCReg]+WordToAdd(instr->extra);
       break;
     case BNE:                        
-      if(register[instr->rs]!=register[instr->rt]) pcAfter=register[NextPCReg]+TypeToReg(instr->extra);
+      if(register[instr->rs]!=register[instr->rt]) pcAfter=register[NextPCReg]+WordToAdd(instr->extra);
       break;
     case BGTZ:                        
-      if(register[instr->rs]>0) pcAfter=register[NextPCReg]+TypeToAddr                      
+      if(register[instr->rs]>0) pcAfter=register[NextPCReg]+WordToAdd(instr->extra);
+      break;
+    case J:                        
+      pcAfter=(pcAfter & 0xf0000000) | WordToAdd(instr->extra);
+      break;
+    case JAL:                        
+      register[R31]=register[NextPCReg]+4;                      
                             
       
       
