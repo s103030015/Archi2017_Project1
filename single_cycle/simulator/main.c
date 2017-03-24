@@ -125,7 +125,12 @@ void Instruction(Instructioin *instr)
       if((value & 0x8000) && (instr->opCode == LH)) value |= 0xffff0000;
       else value &= 0xffff;
       nextLoadReg=instr->rt;
-      nextLoadV
+      nextLoadValue=value;
+      break;
+    case LB:
+    case LBU:
+      tmp=register[instr->rs]+instr->extra;
+      
       
       
       
