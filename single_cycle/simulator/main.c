@@ -1,4 +1,4 @@
-#include "instruc.h"
+#include "define.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
