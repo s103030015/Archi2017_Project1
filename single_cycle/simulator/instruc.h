@@ -30,18 +30,44 @@
 #define SW 0x2B
 #define SH 0x29
 #define SB 0x28
-  {"LUI r%d,%d", {RT, EXTRA, NONE}},
-  {"ANDI r%d,r%d,%d", {RT, RS, EXTRA}},
-  {"ORI r%d,r%d,%d", {RT, RS, EXTRA}},
-  {"NORI r%d,r%d,%d", {RT, RS, EXTRA}},
-  {"SLTI r%d,r%d,%d", {RT, RS, EXTRA}},
-  {"BEQ r%d,r%d,%d", {RS, RT, EXTRA}},
-  {"BNE r%d,r%d,%d", {RS, RT, EXTRA}},
-  {"BGTZ r%d,%d", {RS, EXTRA, NONE}},
-  {"J %d", {EXTRA, NONE, NONE}},
-  {"JAL %d", {EXTRA, NONE, NONE}}
+#define LUI 0x0F
+#define ANDI 0x0C
+#define ORI 0x0D
+#define NORI 0x0E
+#define SLTI 0x0A
+#define BEQ 0x04
+#define BNE 0x05
+#define BGTZ 0x07
 
-enum RegType { NONE, RS, RT, RD, EXTRA}
+#define J 0x02
+#define JAL 0x03
+
+#define WordToAdd(x) ((x)<<2)
+
+#define RFORM 1
+#define IFORM 2
+#define JFORM 3
+
+struct OpType {
+  int opCode;
+  int format;
+};
+
+static OpType optype[] = {
+  {ADD, RFORM}, {ADDU, RFORM}, {SUB, RFORM}, {AND, RFORM},
+  {OR, RFORM}, {XOR, RFORM}, {NOR, RFORM}, {NAND, RFORM},
+  {SLT, RFORM}, {SLL, RFORM}, {SRL, RFORM}, {SRA, RFORM},
+  {JR, RFORM}, {MULT, RFORM}, {MULTU, RFORM}, {MFHI, RFORM},
+  {MFLO, RFORM}, {ADDI, IFORM},{ADDIU, IFORM}, {LW, IFORM},
+  {LH, IFORM}, {LHU, IFORM}, {LB, IFORM}, {LBU, IFORM},
+  {SW, IFORM}, {SH, IFORM}, {SB, IFORM}, {LUI, IFORM},
+  {ANDI, IFORM}, {ORI, IFORM}, {NORI, IFORM}, {SLTI, IFORM},
+  {BEQ, IFORM}, {BNE, IFORM}, {BGTZ, IFORM}, {J, JFORM},
+  {JAL, JFORM}
+};
+
+enum RegType { NONE, RS, RT, RD, EXTRA};
+
 struct OpString{
   char *format;
   RegType arg[3];
