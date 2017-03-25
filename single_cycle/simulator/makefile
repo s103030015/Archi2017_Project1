@@ -1,4 +1,4 @@
-CC = $(GCCDIR)gcc
-AS = $(GCCDIR)as
-LD = $(GCCDIR)ld
+CC = gcc -Wall
+SRCS = ./*.c
+OBS = ./*.o
 
