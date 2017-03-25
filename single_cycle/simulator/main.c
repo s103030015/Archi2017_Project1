@@ -9,7 +9,7 @@ int error_cycle[4];
 int data_i[256], data_d[256], reg[32];
 int *i_code, *d_code;
 unsigned int PC;
-static int op , rs , rt , rd , shamt , funct , imm , address ;
+static int op, rs, rt, rd, shamt, funct, imm, addr;
 int type;
 
 void error_detect(int cycle)
@@ -22,9 +22,62 @@ void error_detect(int cycle)
     memset(error_cycle, 0, sizeof(int)*4);
 }
 
+static void Mult(int a, int b, bool sign, int *hiPtr, int *loPtr)
+{
+    bool negative;
+    unsigned int bLo, bHi, lo, hi;
+    int i;
+    
+    if ((a == 0) || (b == 0)) 
+    {
+	    *hiPtr = *loPtr = 0;
+	    return;
+    }
+    
+    negative = FALSE;
+    
+    if (sign) {
+	    if (a<0) {
+	        negative = !negative;
+	        a = -a;
+	    }
+	    if (b<0) {
+	        negative = !negative;
+	     b = -b;
+	    }
+    }
+
+    bLo=b;
+    bHi=0;
+    lo=0;
+    hi=0;
+    for (i=0; i<32; i++) {
+	    if (a & 1) {
+	        lo += bLo;
+	        if (lo < bLo) hi += 1;
+	        hi += bHi;
+	        if ((a & 0xfffffffe) == 0) break;
+	    }
+	    bHi <<= 1;
+	    if (bLo & 0x80000000) bHi |= 1;
+	    bLo <<= 1;
+	    a >>= 1;
+    }
+    
+    if (negative) {
+	    hi = ~hi;
+	    lo = ~lo;
+	    lo++;
+	    if (lo == 0) hi++;
+    }
+    
+    *hiPtr = (int) hi;
+    *loPtr = (int) lo;
+}
+
 void decode(int inst)
 {
-  int sum, diff, temp;
+  int sum, diff, tmp;
   
   op=(inst>>26) & 0x3f;
   if(op == 0x3f) exit(0);
