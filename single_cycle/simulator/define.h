@@ -43,6 +43,7 @@
 #define JAL 0x03
 
 #define WordToAdd(x) ((x)<<2)
+#define AddToWord(x) ((x)>>2)
 
 #define RFORM 1
 #define IFORM 2
