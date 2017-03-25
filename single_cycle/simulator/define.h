@@ -49,12 +49,12 @@
 #define IFORM 2
 #define JFORM 3
 
-struct OpType {
-  int opCode;
+struct op_info{
+  int opcode;
   int format;
 };
 
-static OpType optype[] = {
+static op_info op_table[] = {
   {ADD, RFORM}, {ADDU, RFORM}, {SUB, RFORM}, {AND, RFORM},
   {OR, RFORM}, {XOR, RFORM}, {NOR, RFORM}, {NAND, RFORM},
   {SLT, RFORM}, {SLL, RFORM}, {SRL, RFORM}, {SRA, RFORM},
@@ -69,12 +69,12 @@ static OpType optype[] = {
 
 enum RegType { NONE, RS, RT, RD, EXTRA};
 
-struct OpString{
+struct op_string{
   char *format;
   RegType arg[3];
 };
 
-static struct OpString opstrings[] = {
+static struct op_string  opString[] ={
   {"ADD r%d,r%d,r%d", {RD, RS, RT}},
   {"ADDU r%d,r%d,r%d", {RD, RS, RT}},
   {"SUB r%d,r%d,r%d", {RD, RS, RT}},
@@ -114,3 +114,9 @@ static struct OpString opstrings[] = {
   {"JAL %d", {EXTRA, NONE, NONE}}
 };
   
+typedef struct instruction{
+  char opCode;
+  unsigned int value;
+  char rs, rt, rd;
+  int extra;
+}INST;
